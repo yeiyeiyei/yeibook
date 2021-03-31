@@ -1,5 +1,23 @@
 #!/bin/bash
 
+
+
+# LABEL: Aquarela, Intro
+# ANSI Shadow (Normal, Normal) https://manytools.org/hacker-tools/ascii-banner/
+echo -e "\e[1;35m
+
+   #     #####  #     #    #    ######  ####### #          #
+  # #   #     # #     #   # #   #     # #       #         # #
+ #   #  #     # #     #  #   #  #     # #       #        #   #
+#     # #     # #     # #     # ######  #####   #       #     #
+####### #   # # #     # ####### #   #   #       #       #######
+#     # #    #  #     # #     # #    #  #       #       #     #
+#     #  #### #  #####  #     # #     # ####### ####### #     #
+
+\e[0m"
+
+
+
 # LABEL
 echo -e "\e[1;33m
 ################################################################################
@@ -11,10 +29,17 @@ echo -e "\e[1;33m
 
 echo -e "\e[1;42m
 ################################################################################
+# VARIABLES
+################################################################################
+USER = $USER
+\e[0m"
+
+echo -e "\e[1;42m
+################################################################################
 # ARGUMENTS
 ################################################################################
-Argument 0 = Script Filename = $0
-Argument 1 = User = $1
+Argument 0 = Script = $0
+Argument 1 = Not Defined   = $1
 \e[0m"
 
 
@@ -71,7 +96,6 @@ echo -e "\e[1;33m
  \e[0m"
 # COMMANDS
 sudo apt purge -y snapd
-sudo apt autoremove -y
 
 
 # LABEL
@@ -94,6 +118,35 @@ python3 -m venv /home/$USER/.env/python/3
 # PyEnv: Script
 # https://github.com/pyenv/pyenv-installer
 sudo curl https://pyenv.run | bash
+
+
+
+# LABEL
+echo -e "\e[1;35m
+################################################################################
+# FIRMWARE: Bluez, Repository
+# https://medium.com/@overcode/fixing-bluetooth-in-ubuntu-pop-os-18-04-d4b8dbf7ddd6
+################################################################################
+# SOFTWARE: Bluetooth Audio Configuration. Existing audio.conf
+# https://medium.com/@overcode/fixing-bluetooth-in-ubuntu-pop-os-18-04-d4b8dbf7ddd6
+################################################################################
+ \e[0m"
+# COMMANDS
+cd /tmp
+sudo add-apt-repository -y ppa:bluetooth/bluez
+sudo rm /etc/bluetooth/audio.conf
+sudo touch /etc/bluetooth/audio.conf
+#if [ -f "/etc/bluetooth/audio.conf" ];
+#then echo "The file exists, removing..."; sudo rm /etc/bluetooth/audio.conf;
+#fi
+# create new audio config with content
+echo "# This section contains general options
+[General]
+Enable=Source,Sink,Media,Socket" | sudo tee /etc/bluetooth/audio.conf     # > /etc/bluetooth/audio.conf
+# Service restart
+sudo service bluetooth restart
+
+
 
 # LABEL
 echo -e "\e[1;33m
@@ -125,37 +178,16 @@ sudo mkdir cunidev
 cd cunidev
 sudo apt install -y python3 python3-gi python-gobject python3-setuptools
 sudo apt install -y meson xdotool libinput-tools gettext
+# NEXT 2 LINES: uncomment if APT has an older version of Meson
+sudo apt purge -y meson # uncomment if APT has an older version of Meson
+sudo pip3 install meson # uncomment if APT has an older version of Meson
+sudo ln -s /usr/local/bin/meson /usr/bin/meson
 sudo git clone https://gitlab.com/cunidev/gestures
 sudo git clone https://gitlab.com/cunidev/gestures
 cd gestures
 meson build --prefix=/usr
 ninja -C build
 sudo ninja -C build install
-
-
-
-# LABEL
-echo -e "\e[1;35m
-################################################################################
-# FIRMWARE: Bluez, Repository
-# https://medium.com/@overcode/fixing-bluetooth-in-ubuntu-pop-os-18-04-d4b8dbf7ddd6
-################################################################################
-# SOFTWARE: Bluetooth Audio Configuration. Existing audio.conf
-# https://medium.com/@overcode/fixing-bluetooth-in-ubuntu-pop-os-18-04-d4b8dbf7ddd6
-################################################################################
- \e[0m"
-# COMMANDS
-cd /tmp
-sudo add-apt-repository -y ppa:bluetooth/bluez
-if [ -f "/etc/bluetooth/audio.conf" ];
-then echo "The file exists, removing..."; sudo rm /etc/bluetooth/audio.conf;
-fi
-# create new audio config with content
-sudo echo "# This section contains general options
-[General]
-Enable=Source,Sink,Media,Socket" > /etc/bluetooth/audio.conf
-# Service restart
-sudo service bluetooth restart
 
 
 
@@ -189,6 +221,16 @@ echo "deb [arch=amd64] https://brave-browser-apt-release.s3.brave.com/ $UBUNTU_C
 sudo apt update -y
 sudo apt install -y brave-browser brave-keyring
 
+
+
+# LABEL
+echo -e "\e[1;35m
+################################################################################
+# SOFTWARE: Cerebro
+################################################################################
+ \e[0m"
+# COMMANDS
+# Installed manually
 
 
 # LABEL
@@ -251,9 +293,9 @@ echo -e "\e[1;35m
  \e[0m"
 # COMMANDS
 cd /tmp
-wget https://github.com/docker/kitematic/releases/download/v0.17.7/Kitematic-0.17.7-Ubuntu.zip
-unzip Kitematic-0.17.7-Ubuntu.zip
-sudo apt install -y /tmp/Kitematic-0.17.7_amd64.deb
+wget https://github.com/docker/kitematic/releases/download/v0.17.7/Kitematic-0.17.13-Ubuntu.zip
+unzip Kitematic-0.17.13-Ubuntu.zip
+sudo apt install -y /tmp/Kitematic-0.17.13_amd64.deb
 
 
 
@@ -392,3 +434,7 @@ echo -e "\e[1;35m
 sudo apt -y update
 sudo apt -y upgrade
 sudo apt -y autoremove
+
+
+
+###
